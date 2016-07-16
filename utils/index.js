@@ -2,14 +2,14 @@
 
 var fs = require('fs');
 
-module.exports = globals => {
+module.exports = () => {
     return {
-        loadDirectory (directory, parentObject) {
+        loadDirectory (directory, parentObject, globals) {
             parentObject = parentObject || {};
             fs.readdirSync(directory)
             .filter(e => e !== 'index.js')
             .forEach(e => {
-                parentObject[e] = require(`${directory}/${e}`)(globals);
+                parentObject[e.slice(0, e.length-3)] = require(`${directory}/${e}`)(globals);
             });
             return parentObject;
         }

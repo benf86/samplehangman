@@ -11,6 +11,10 @@ var globals = {
     router
 };
 
+require('./models')(globals);
+require('./repositories')(globals);
+require('./services')(globals);
+
 // Load infrastructure middlewares
 router.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 router.use(bodyParser.json({ limit: '50mb' }));

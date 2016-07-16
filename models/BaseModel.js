@@ -64,6 +64,10 @@ BaseModel.prototype.toJSON = function toJSON (replacer, space) {
     return JSON.stringify(this.data, replacer, space);
 };
 
+BaseModel.prototype.toObject = function toObject () {
+    return this.data;
+};
+
 BaseModel.prototype.toString = function toString (replacer, space) {
     replacer = replacer || null;
     space = space || null;
@@ -82,4 +86,4 @@ BaseModel.prototype.getCreatedAt = function getCreatedAt () {
     return new Date(this.created_at);
 };
 
-module.exports = BaseModel;
+module.exports = () => BaseModel;

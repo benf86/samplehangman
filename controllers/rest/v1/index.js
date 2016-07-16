@@ -3,9 +3,8 @@
 module.exports = globals => {
     globals.routes = globals.routes || {};
     globals.routes.rest = [];
-    var routes = globals.utils.loadDirectory(__dirname);
+    var routes = globals.utils.loadDirectory(__dirname, null, globals);
     for (let route in routes) {
-        console.log(routes[route]);
         globals.routes.rest = globals.routes.rest.concat(routes[route]);
     }
 

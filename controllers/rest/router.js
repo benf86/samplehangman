@@ -7,27 +7,24 @@ module.exports = globals => {
             route.path,
 
             // Authorization middleware
-            function authorize (req, res, next) {
-                // Invoke authorization middleware here
-                next();
-            },
+            require('./authorization'),
 
-            // Input data sanitization middleware
-            function sanitize (req, res, next) {
-                // Invoke sanitization middleware here
-                next();
-            },
+            // Input input data sanitization middleware
+            require('./sanitization'),
 
             // Request handler
             function handleRequest (req, res, next) {
                 route.handler(req)
                 .then(r => {
-                    res.status(200).json(r);
+                    res.status(200).json(r.toObject());
                 })
                 .catch(e => {
                     next(e);
                 });
-            }
+            },
+
+            // Error handler
+            require('./error')
         );
     });
 };

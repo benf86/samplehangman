@@ -15,7 +15,7 @@ module.exports = function sampleRouteInitializer (globals) {
                 }
             },
             handler (req) {
-                return globals.services.sampleRoute.get(req.query);
+                return globals.services.sampleService.get(req.query);
             }
         }
     ];
