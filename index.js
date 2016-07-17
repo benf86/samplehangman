@@ -4,16 +4,20 @@ var config = require('config');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var router = express.Router();
+var expressWs = require('express-ws')(app);
+var routerREST = express.Router();
 var db = require('knex')(config.get('database'));
+var events = require('events');
 
 db.migrate.latest()
 .then(() => {
 
 var globals = {
     utils: require('./utils')(globals),
-    router,
-    db
+    router: routerREST,
+    db: db,
+    app: app,
+    ee: new events.EventEmitter()
 };
 
 require('./models')(globals);
@@ -21,12 +25,14 @@ require('./repositories')(globals);
 require('./services')(globals);
 
 // Load infrastructure middlewares
-router.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-router.use(bodyParser.json({ limit: '50mb' }));
+routerREST.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+routerREST.use(bodyParser.json({ limit: '50mb' }));
 
-// Load router
+// Load routers
 require('./controllers/rest/router')(globals);
-app.use(router);
+app.use('/rest', routerREST);
+require('./controllers/websockets/router')(globals);
+
 
 // Blastoff!
 console.log('Server listening on port ' + config.infrastructure.port);

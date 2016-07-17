@@ -17,6 +17,19 @@ module.exports = globals => {
             });
         },
 
+        getAll () {
+            return globals.db('games')
+            .where('id', '>', 0)
+            .then(gameModels => {
+                if (gameModels.length === 0) throw ErrorModel.notFound('No games found in the system');
+
+                return gameModels.map(gameModel => {
+                    gameModel.game_data = JSON.parse(gameModel.game_data);
+                    return GameModel.create(gameModel);
+                });
+            });
+        },
+
         create () {
             return this.store(GameModel.create());
         },
@@ -40,13 +53,19 @@ module.exports = globals => {
             if (!modelId) {
                 return globals.db('games')
                 .insert(gameModel.toObject())
-                .then(() => parseGameData(gameModel));
+                .then(() => parseGameData(gameModel))
+                .tap(() => {
+                    globals.ee.emit('games.update');
+                });
             }
 
             return globals.db('games')
             .where({ id: modelId })
             .update(gameModel.toObject())
-            .then(() => parseGameData(gameModel));
+            .then(() => parseGameData(gameModel))
+            .tap(() => {
+                globals.ee.emit('games.update');
+            });
         }
     };
 };

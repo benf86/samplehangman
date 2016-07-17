@@ -7,6 +7,10 @@ module.exports = globals => {
             return gameRepository.get(where);
         },
 
+        getAll () {
+            return gameRepository.getAll();
+        },
+
         create () {
             return gameRepository.create();
         },

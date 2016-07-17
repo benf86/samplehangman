@@ -6,12 +6,6 @@ module.exports = globals => {
         globals.router[route.verb](
             route.path,
 
-            // Authorization middleware
-            require('./authorization'),
-
-            // Input input data sanitization middleware
-            require('./sanitization'),
-
             // Request handler
             function handleRequest (req, res, next) {
                 route.handler(req)
