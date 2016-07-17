@@ -12,4 +12,12 @@ ErrorModel.serverError = function (message, code) {
     return BaseModel.create(ErrorModel, params);
 };
 
+ErrorModel.notFound = function (message, code) {
+    let params = {
+        message: message || 'Resource not found',
+        code: code || 404
+    };
+    return BaseModel.create(ErrorModel, params);
+};
+
 module.exports = () => ErrorModel;

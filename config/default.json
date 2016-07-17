@@ -1,5 +1,19 @@
 {
     "infrastructure": {
         "port": 8000
+    },
+    "database": {
+        "automigrate": true,
+        "debug": false,
+        "client": "sqlite3",
+        "charset": "utf8",
+        "connection": {
+            "filename": "./data/db/db.sqlite"
+        },
+        "useNullAsDefault": true,
+        "migrations": {
+            "tableName": "migrations",
+            "directory": "./data/db/migrations/"
+        }
     }
 }

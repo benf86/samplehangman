@@ -5,10 +5,15 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var router = express.Router();
+var db = require('knex')(config.get('database'));
+
+db.migrate.latest()
+.then(() => {
 
 var globals = {
     utils: require('./utils')(globals),
-    router
+    router,
+    db
 };
 
 require('./models')(globals);
@@ -26,3 +31,5 @@ app.use(router);
 // Blastoff!
 console.log('Server listening on port ' + config.infrastructure.port);
 app.listen(config.infrastructure.port);
+
+});
