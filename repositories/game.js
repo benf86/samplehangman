@@ -20,6 +20,8 @@ module.exports = globals => {
         getAll () {
             return globals.db('games')
             .where('id', '>', 0)
+            .orderBy('id', 'desc')
+            .limit(10)
             .then(gameModels => {
                 if (gameModels.length === 0) throw ErrorModel.notFound('No games found in the system');
 
@@ -55,7 +57,7 @@ module.exports = globals => {
                 .insert(gameModel.toObject())
                 .then(() => parseGameData(gameModel))
                 .tap(() => {
-                    globals.ee.emit('games.update');
+                    globals.wsClients.notifyAll();
                 });
             }
 
@@ -64,7 +66,7 @@ module.exports = globals => {
             .update(gameModel.toObject())
             .then(() => parseGameData(gameModel))
             .tap(() => {
-                globals.ee.emit('games.update');
+                globals.wsClients.notifyAll();
             });
         }
     };
